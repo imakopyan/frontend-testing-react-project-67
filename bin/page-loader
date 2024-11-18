@@ -1,0 +1,21 @@
+#!/usr/bin/env node
+import { Command } from 'commander';
+import pageLoader from '../src/pageLoader.js';
+
+const program = new Command();
+
+program
+  .version('1.0.0')
+  .option('-o, --output <output>', 'output directory', process.cwd())
+  .arguments('<url>')
+  .action(async (url) => {
+    const options = program.opts(); // Получаем параметры командной строки
+    try {
+      const { filepath } = await pageLoader(url, options.output);
+      console.log(filepath);
+    } catch (error) {
+      console.error('Error downloading the page:', error.message);
+    }
+  });
+
+program.parse(process.argv);
